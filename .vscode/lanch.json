@@ -1,0 +1,42 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug executable 'rust-ml-sandbox'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--bin=rust-ml-sandbox",
+                    "--package=rust-ml-sandbox"
+                ],
+                "filter": {
+                    "name": "rust-ml-sandbox",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in executable 'rust-ml-sandbox'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--bin=rust-ml-sandbox",
+                    "--package=rust-ml-sandbox"
+                ],
+                "filter": {
+                    "name": "rust-ml-sandbox",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        }
+    ]
+}
