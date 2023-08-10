@@ -15,14 +15,22 @@ fn main() -> anyhow::Result<()> {
 
     // Set-up sentence embeddings model
     let model = SentenceEmbeddingsBuilder::remote(SentenceEmbeddingsModelType::AllMiniLmL12V2)
-        .create_model()?;
+        .create_model()
+        .map_err(|error| {
+            println!("Failed to create model: {:?}", error);
+            error
+        })?;
 
     // Define input
     let sentences = ["this is an example sentence", "each sentence is converted"];
 
     // Generate Embeddings
-    let embeddings = model.encode(&sentences)?;
-    println!("{embeddings:?}");
+    let embeddings = model.encode(&sentences).map_err(|error| {
+        println!("Failed to generate embeddings: {:?}", error);
+        error
+    })?;
+
+    tracing.into("Embeddings result: {:?}", embeddings);
 
     Ok(())
 }
