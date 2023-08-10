@@ -47,6 +47,8 @@ pub(crate) fn initialize_logging() -> Result<()> {
         error
     })?;
 
+    tracing::info!("Logging initialized");
+
     Ok(())
 }
 
