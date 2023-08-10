@@ -30,6 +30,8 @@ RUN rustup component add \
     && cargo install \
     cargo-edit \
     cargo-watch
+# Set environment variables for Rust logging
+ENV RUST_LOG=info
 
 # Download and install libtorch 2.0.1 for CUDA 11.8
 ENV LIBTORCH_VERSION=2.0.1
@@ -41,4 +43,5 @@ ENV TORCH_LIB_PATH=/opt/libtorch/lib
 ENV LD_LIBRARY_PATH=$TORCH_LIB_PATH:$LD_LIBRARY_PATH
 ENV LIBTORCH=/opt/libtorch
 
+# Set working directory
 WORKDIR /workspace
