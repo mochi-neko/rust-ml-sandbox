@@ -34,14 +34,14 @@ RUN rustup component add \
 ENV RUST_LOG=info
 
 # Download and install libtorch 2.0.1 for CUDA 11.8
-ENV LIBTORCH_VERSION=2.0.1
-RUN wget https://download.pytorch.org/libtorch/cu118/libtorch-cxx11-abi-shared-with-deps-${LIBTORCH_VERSION}%2Bcu118.zip \
-    && unzip libtorch-cxx11-abi-shared-with-deps-${LIBTORCH_VERSION}+cu118.zip -d /opt \
-    && rm libtorch-cxx11-abi-shared-with-deps-${LIBTORCH_VERSION}+cu118.zip
+# ENV LIBTORCH_VERSION=2.0.1
+# RUN wget https://download.pytorch.org/libtorch/cu118/libtorch-cxx11-abi-shared-with-deps-${LIBTORCH_VERSION}%2Bcu118.zip \
+#     && unzip libtorch-cxx11-abi-shared-with-deps-${LIBTORCH_VERSION}+cu118.zip -d /opt \
+#     && rm libtorch-cxx11-abi-shared-with-deps-${LIBTORCH_VERSION}+cu118.zip
 # Set environment variables for libtorch
-ENV TORCH_LIB_PATH=/opt/libtorch/lib
-ENV LD_LIBRARY_PATH=$TORCH_LIB_PATH:$LD_LIBRARY_PATH
-ENV LIBTORCH=/opt/libtorch
+# ENV TORCH_LIB_PATH=/opt/libtorch/lib
+# ENV LD_LIBRARY_PATH=$TORCH_LIB_PATH:$LD_LIBRARY_PATH
+# ENV LIBTORCH=/opt/libtorch
 
 # Set working directory
 WORKDIR /workspace
