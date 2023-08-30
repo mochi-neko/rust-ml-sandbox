@@ -7,26 +7,28 @@ struct Model {
 }
 
 impl Model {
-    fn forward(&self, image: &Tensor) -> Result<Tensor> {
-        let x = image.contiguous()?.matmul(&self.first.contiguous()?)?;
-        println!("x shape: {:?}", x.shape());
+    fn forward(
+        &self,
+        image: &Tensor,
+    ) -> Result<Tensor> {
+        let x = image
+            .contiguous()?
+            .matmul(&self.first.contiguous()?)?;
         let x = x.relu()?;
-        println!("x shape: {:?}", x.shape());
-        x.contiguous()?.matmul(&self.second.contiguous()?)
+        x.contiguous()?
+            .matmul(&self.second.contiguous()?)
     }
 }
 
 fn main() -> Result<()> {
     let device = Device::new_cuda(0)?;
-    println!("Device is cuda: {:?}", device.is_cuda());
-
     let first = Tensor::zeros((784, 100), DType::F32, &device)?;
-    println!("First tensor shape: {:?}", first.shape());
-
     let second = Tensor::zeros((100, 10), DType::F32, &device)?;
-    println!("Second tensor shape: {:?}", second.shape());
 
-    let model = Model { first, second };
+    let model = Model {
+        first,
+        second,
+    };
 
     let dummy_image = Tensor::zeros((1, 784), DType::F32, &device)?;
 

@@ -7,8 +7,13 @@ struct Linear {
 }
 
 impl Linear {
-    fn forward(&self, x: &Tensor) -> Result<Tensor> {
-        let x = x.contiguous()?.matmul(&self.weight.contiguous()?)?;
+    fn forward(
+        &self,
+        x: &Tensor,
+    ) -> Result<Tensor> {
+        let x = x
+            .contiguous()?
+            .matmul(&self.weight.contiguous()?)?;
         x.broadcast_add(&self.bias)
     }
 }
@@ -19,7 +24,10 @@ struct Model {
 }
 
 impl Model {
-    fn forward(&self, image: &Tensor) -> Result<Tensor> {
+    fn forward(
+        &self,
+        image: &Tensor,
+    ) -> Result<Tensor> {
         let x = self.first.forward(image)?;
         let x = x.relu()?;
         self.second.forward(&x)
@@ -34,11 +42,20 @@ fn main() -> Result<()> {
     // Creating a dummy model
     let weight = Tensor::zeros((784, 100), DType::F32, &device)?;
     let bias = Tensor::zeros((100,), DType::F32, &device)?;
-    let first = Linear { weight, bias };
+    let first = Linear {
+        weight,
+        bias,
+    };
     let weight = Tensor::zeros((100, 10), DType::F32, &device)?;
     let bias = Tensor::zeros((10,), DType::F32, &device)?;
-    let second = Linear { weight, bias };
-    let model = Model { first, second };
+    let second = Linear {
+        weight,
+        bias,
+    };
+    let model = Model {
+        first,
+        second,
+    };
 
     let dummy_image = Tensor::zeros((1, 784), DType::F32, &device)?;
 

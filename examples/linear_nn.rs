@@ -8,7 +8,10 @@ struct Model {
 }
 
 impl Model {
-    fn forward(&self, image: &Tensor) -> Result<Tensor> {
+    fn forward(
+        &self,
+        image: &Tensor,
+    ) -> Result<Tensor> {
         let x = self.first.forward(image)?;
         let x = x.relu()?;
         self.second.forward(&x)
@@ -26,7 +29,10 @@ fn main() -> Result<()> {
     let weight = Tensor::zeros((10, 100), DType::F32, &device)?;
     let bias = Tensor::zeros((10,), DType::F32, &device)?;
     let second = Linear::new(weight, Some(bias));
-    let model = Model { first, second };
+    let model = Model {
+        first,
+        second,
+    };
 
     let dummy_image = Tensor::zeros((1, 784), DType::F32, &device)?;
 

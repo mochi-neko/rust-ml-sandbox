@@ -1,3 +1,4 @@
+// Official hello world: https://huggingface.github.io/candle/guide/hello_world.html
 use candle_core::Device;
 use hf_hub::api::sync::Api;
 
