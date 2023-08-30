@@ -10,3 +10,6 @@ license = "MIT"
 [dependencies]
 anyhow = "1.0.72"
 tokio = "1.29.1"
+candle-core = { git = "https://github.com/huggingface/candle.git", features = [
+    "cuda",
+] }
