@@ -16,3 +16,5 @@ candle-core = { git = "https://github.com/huggingface/candle.git", features = [
 ] }
 candle-nn = { git = "https://github.com/huggingface/candle.git", version = "0.2.0" }
 hf-hub = { version = "0.3.0", features = ["tokio"] }
+candle-datasets = { git = "https://github.com/huggingface/candle.git", version = "0.2.0" }
+rand = "0.8.5"
