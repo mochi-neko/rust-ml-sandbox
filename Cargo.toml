@@ -13,3 +13,5 @@ tokio = "1.29.1"
 candle-core = { git = "https://github.com/huggingface/candle.git", features = [
     "cuda",
 ] }
+candle-nn = { git = "https://github.com/huggingface/candle.git", version = "0.2.0" }
+hf-hub = { version = "0.3.0", features = ["tokio"] }
