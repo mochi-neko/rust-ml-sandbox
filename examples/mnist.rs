@@ -1,7 +1,7 @@
 // https://github.com/huggingface/candle/blob/main/candle-examples/examples/mnist-training/main.rs
 // This should reach 91.5% accuracy.
 use candle_core::{DType, Result, Tensor, D};
-use candle_nn::{loss, ops, Conv2d, Linear, VarBuilder, VarMap};
+use candle_nn::{loss, ops, Conv2d, Linear, Optimizer, VarBuilder, VarMap};
 use rand::prelude::*;
 
 const LABELS: usize = 10;
@@ -52,8 +52,8 @@ impl Model for ConvolutionalNetwork {
         &self,
         xs: &Tensor,
     ) -> Result<Tensor> {
-        let (b_sz, _img_dim) = xs.dims2()?;
-        xs.reshape((b_sz, 1, 28, 28))?
+        let (batch_size, _image_dimension) = xs.dims2()?;
+        xs.reshape((batch_size, 1, 28, 28))?
             .apply(&self.conv1)?
             .max_pool2d(2)?
             .apply(&self.conv2)?
@@ -94,7 +94,6 @@ fn training_loop(
     let var_builder_args =
         VarBuilder::from_varmap(&var_map, DType::F32, &device);
     let model = ConvolutionalNetwork::new(var_builder_args.clone())?;
-
     if let Some(load) = &args.load {
         println!("loading weights from {load}");
         var_map.load(load)?
@@ -106,7 +105,7 @@ fn training_loop(
         ..Default::default()
     };
     let mut optimizer =
-        candle_nn::AdamW::new(var_map.all_vars(), adamw_params)?;
+        candle_nn::AdamW::new_lr(var_map.all_vars(), args.learning_rate)?;
 
     // Test dataset
     let test_images = dateset
@@ -116,9 +115,9 @@ fn training_loop(
         .test_labels
         .to_dtype(DType::U32)?
         .to_device(&device)?;
+
     let batches = train_images.dim(0)? / BSIZE;
     let mut batch_indices = (0..batches).collect::<Vec<usize>>();
-
     for epoch in 1..args.epochs {
         let mut sum_loss = 0f32;
         batch_indices.shuffle(&mut thread_rng());
@@ -163,22 +162,22 @@ fn training_loop(
 
 pub fn main() -> anyhow::Result<()> {
     // Load the dataset
-    let m = candle_datasets::vision::mnist::load()?;
+    let dataset = candle_datasets::vision::mnist::load()?;
     println!(
         "train-images: {:?}",
-        m.train_images.shape()
+        dataset.train_images.shape()
     );
     println!(
         "train-labels: {:?}",
-        m.train_labels.shape()
+        dataset.train_labels.shape()
     );
     println!(
         "test-images: {:?}",
-        m.test_images.shape()
+        dataset.test_images.shape()
     );
     println!(
         "test-labels: {:?}",
-        m.test_labels.shape()
+        dataset.test_labels.shape()
     );
 
     let training_args = TrainingArgs {
@@ -187,5 +186,5 @@ pub fn main() -> anyhow::Result<()> {
         load: None,
         save: None,
     };
-    training_loop(m, &training_args)
+    training_loop(dataset, &training_args)
 }
