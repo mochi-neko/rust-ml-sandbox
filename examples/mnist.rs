@@ -100,10 +100,6 @@ fn training_loop(
     }
 
     // Optimizer
-    let adamw_params = candle_nn::ParamsAdamW {
-        lr: args.learning_rate,
-        ..Default::default()
-    };
     let mut optimizer =
         candle_nn::AdamW::new_lr(var_map.all_vars(), args.learning_rate)?;
 
